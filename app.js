@@ -9,12 +9,15 @@ const bodyParser = require("body-parser");
 
 //Importing User model
 const User = require("./Models/Users.js");
+const { executionAsyncResource } = require("async_hooks");
 
 //Initialise application
 const app = express();
 
 //Use middleware and templateengine
 app.use(bodyParser.json());
+app.use(express.static(__dirname + "/Views/CSS"));
+app.set("view-engine", ejs);
 
 //Initialize database connection
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -28,33 +31,7 @@ db.once('open', function() {
 
 app.get("/", (req, res) => {
 
-const user = new User({
-
-    _id: mongoose.Types.ObjectId(),
-    username: "Test",
-    password: "1234",
-    email: "david@cbs.dk",
-    name: "David",
-    age: 20,
-    gender: "male",
-    preferredGender: "female",
-    userInterests: ["Fitness", "Cooking", "Health"],
-    image: {imgName: "Test", data: 1234, contentType: "image"},
-    role: "admin"
-
-});
-
-user.save().then(result => {
-
-    console.log(result);
-
-}).catch(err => {
-
-    console.log(err);
-
-})
-
-res.status(200).json(user);
+    res.render("frontPage.ejs");
 
 });
 
@@ -100,6 +77,58 @@ app.get("/Users", (req, res) => {
         res.status(500).json({error: err});
 
     });
+
+});
+
+app.post("/login", (req, res) => {
+
+if (req.body.email != "" && req.body.password != "") {
+
+    const user = new User({
+
+        _id: mongoose.Types.ObjectId(),
+        email: req.body.email,
+        password: req.body.password,
+        name: "test",
+        age: 12,
+        gender: "Unknown",
+        preferredGender: "Unknown",
+        userInterests: ["test"],
+        image: { imgName: "test", data: 123, contentType: "String"},
+        role: "User"
+
+    });
+
+    user.save()
+    .then(result => {
+
+        if (result) {
+
+            res.status(200).json(result);
+
+        } else {
+
+            res.status(404).json({message: "Couldn't create user"});
+
+        }
+
+    })
+    .catch(err => {
+
+        if (err) {
+
+            console.log(err);
+            res.status(500).json({error: err});
+
+        }
+
+    });
+
+} else {
+
+    res.send("No email or password were given");
+
+}
 
 });
 

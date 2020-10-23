@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBS Dating</title>
+    <link rel="stylesheet" type= "text/css" href="/frontPage.css">
+</head>
+<body>
+    <h1>Velkommen til CBS Dating</h1>
+    <div class="grid">
+        <div class="divLogin">
+            <h3>Log ind</h3>
+            <form action="/login" method="POST" name="loginForm">
+                
+                <label for="email">Indtast Email</label>
+                <input type="email" name="email" id="loginEmail">
+                <br>
+                <label for="password">Indtast Password</label>
+                <input type="password" name="password" id="loginPass">
+                <br>
+                <button type="submit" id="loginButton">Log ind</button>
+            
+            </form>
+        </div>
+        
+        <div class="divSignup">
+            <h3>Opret bruger</h3>
+            <form action="/signup" method="POST" name="signupForm">
+                
+                <label for="email">Indtast Email</label>
+                <input type="email" name="email" id="signupEmail">
+                <br>
+                <label for="password">Indtast Password</label>
+                <input type="password" name="password" id="signupPass">
+                <br>
+                <button type="submit" id="signupButton">Opret bruger</button>
+            
+            </form>
+        </div>
+    </div>
+    <script src="./JS/frontPage.js"></script>
+</body>
+</html>
