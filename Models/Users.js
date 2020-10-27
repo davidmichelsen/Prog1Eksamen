@@ -10,7 +10,7 @@ const userSchema = mongoose.Schema({
     gender: String,
     preferredGender: String,
     userInterests: [String],
-    image: { imgName: String, data: Buffer, contentType: String},
+    image: Object,
     role: String
 
 });

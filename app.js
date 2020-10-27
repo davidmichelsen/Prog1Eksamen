@@ -9,13 +9,24 @@ const bodyParser = require("body-parser");
 
 //Importing User model
 const User = require("./Models/Users.js");
-const { executionAsyncResource } = require("async_hooks");
+
+//Setup multer storage for uploaded user images
+const storage = multer.diskStorage({
+
+    destination: "./images/",
+
+    filename: (req, file, cb) => {
+        cb(null, req.body.email)
+    }
+});
+const upload = multer({storage: storage});
 
 //Initialise application
 const app = express();
 
 //Use middleware and templateengine
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/Views/CSS"));
 app.set("view-engine", ejs);
 
@@ -80,21 +91,23 @@ app.get("/Users", (req, res) => {
 
 });
 
-app.post("/login", (req, res) => {
+app.post("/signup", upload.single("image"), (req, res) => {
 
-if (req.body.email != "" && req.body.password != "") {
+console.log(req.file);
+
+if (req.body != null) {
 
     const user = new User({
 
         _id: mongoose.Types.ObjectId(),
         email: req.body.email,
         password: req.body.password,
-        name: "test",
-        age: 12,
-        gender: "Unknown",
-        preferredGender: "Unknown",
-        userInterests: ["test"],
-        image: { imgName: "test", data: 123, contentType: "String"},
+        name: req.body.name,
+        age: req.body.age,
+        gender: req.body.gender,
+        preferredGender: req.body.preferredGender,
+        userInterests: req.body.interests,
+        image: req.file,
         role: "User"
 
     });
@@ -126,7 +139,7 @@ if (req.body.email != "" && req.body.password != "") {
 
 } else {
 
-    res.send("No email or password were given");
+    res.send("No information was entered");
 
 }
 
