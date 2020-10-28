@@ -106,7 +106,7 @@ if (req.body != null) {
         age: req.body.age,
         gender: req.body.gender,
         preferredGender: req.body.preferredGender,
-        userInterests: req.body.interests,
+        userInterests: req.body.interests.split(", "),
         image: req.file,
         role: "User"
 
