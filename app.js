@@ -93,55 +93,97 @@ app.get("/Users", (req, res) => {
 
 app.post("/signup", upload.single("image"), (req, res) => {
 
-console.log(req.file);
-
 if (req.body != null) {
 
-    const user = new User({
+    User.find({email: req.body.email})
+    .then(users => {
 
-        _id: mongoose.Types.ObjectId(),
-        email: req.body.email,
-        password: req.body.password,
-        name: req.body.name,
-        age: req.body.age,
-        gender: req.body.gender,
-        preferredGender: req.body.preferredGender,
-        userInterests: req.body.interests.split(", "),
-        image: req.file,
-        role: "User"
+        if (users.length > 0) {
 
-    });
+            res.status(404).json({message: "A user already exists with the given email"});
 
-    user.save()
-    .then(result => {
+        } 
 
-        if (result) {
+        const user = new User({
 
-            res.status(200).json(result);
+            _id: mongoose.Types.ObjectId(),
+            email: req.body.email,
+            password: req.body.password,
+            name: req.body.name,
+            age: req.body.age,
+            gender: req.body.gender,
+            preferredGender: req.body.preferredGender,
+            userInterests: req.body.interests.split(", "),
+            image: req.file,
+            role: "User"
+    
+        });
+    
+        user.save()
+        .then(result => {
+    
+            if (result) {
+    
+                res.status(200).json(result);
+    
+            } else {
+    
+                res.status(404).json({message: "Couldn't create user"});
+    
+            }
+    
+        })
+        .catch(err => {
+    
+            if (err) {
+    
+                console.log(err);
+                res.status(500).json({error: err});
+    
+            }
+    
+        });
 
-        } else {
-
-            res.status(404).json({message: "Couldn't create user"});
-
-        }
 
     })
-    .catch(err => {
+    .catch(err => res.status(404).json({error: err}));
 
-        if (err) {
-
-            console.log(err);
-            res.status(500).json({error: err});
-
-        }
-
-    });
 
 } else {
 
     res.send("No information was entered");
 
 }
+
+});
+
+app.post("/login", (req, res) => {
+
+if (req.body != null) {
+
+    User.find({email: req.body.email})
+    .then(users => {
+
+        if (users.length < 1) {
+
+            res.status(403).json({message: "Unauthorized"});
+
+        }
+
+        if (users[0].password == req.body.password) {
+
+            res.status(200).json({message: "Login successfull - Authorized"});
+
+        } else {
+
+            res.status(403).json({message: "Unauthorized"});
+
+        }
+
+    })
+    .catch(err => res.status(404).json({error: err}));
+
+};
 
 });
 

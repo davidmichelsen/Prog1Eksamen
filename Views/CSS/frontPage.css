@@ -1,3 +1,9 @@
+body {
+
+background-color: #FFFAFA;
+
+}
+
 h1 {
 
     text-align: center;
@@ -14,11 +20,12 @@ h1 {
 
 .divLogin{
 
+    color: #F5FFFA;
     margin-top: 5%;
     margin-left: 23%;
     padding: 5% 10% 0% 10%;
     text-align: left;
-    background-color: #ddd;
+    background-color: #4682B4;
     border-radius: 17px;
     font: 1em sans-serif;
 
@@ -26,11 +33,12 @@ h1 {
 
 .divSignup{
 
+    color: #F5FFFA;
     margin-top: 5%;
     margin-right: 23%;
     padding: 5% 5% 0% 10%;
     text-align: left;
-    background-color: #ddd;
+    background-color:#4682B4;
     border-radius: 17px;
     font: 1em sans-serif;
 
