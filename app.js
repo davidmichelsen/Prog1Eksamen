@@ -6,6 +6,7 @@ const multer = require("multer");
 const ejs = require("ejs");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+var isLoggedIn = false;
 
 //Importing User model
 const User = require("./Models/Users.js");
@@ -125,6 +126,7 @@ if (req.body != null) {
             if (result) {
     
                 res.status(200).json(result);
+                isLoggedIn = true;
     
             } else {
     
@@ -172,7 +174,8 @@ if (req.body != null) {
 
         if (users[0].password == req.body.password) {
 
-            res.status(200).json({message: "Login successfull - Authorized"});
+            res.status(200).redirect("/home");
+            isLoggedIn = true;
 
         } else {
 
@@ -186,6 +189,24 @@ if (req.body != null) {
 };
 
 });
+
+app.get("/home", (req, res) => {
+
+    if (isLoggedIn == true) {
+
+        res.render("homePage.ejs");
+
+    } else {
+
+        res.status(403).redirect("/");
+
+    }
+
+});
+
+app.get("/login", (req, res) => res.redirect("/"));
+
+app.get("/signup", (req, res) => res.redirect("/"));
 
 //Start application
 app.listen(3000, () => {
