@@ -28,9 +28,7 @@ const app = express();
 //Use middleware and templateengine
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static(__dirname + "/Views/CSS"));
 app.use(express.static("./images/"));
-//app.set("view-engine", ejs);
 app.use(cors());
 
 //Initialize database connection
@@ -196,7 +194,7 @@ app.get("/home", (req, res) => {
 
     if (isLoggedIn == true) {
 
-        res.render("homePage.ejs");
+        res.status(200).send("Congrats! You have access!");
 
     } else {
 

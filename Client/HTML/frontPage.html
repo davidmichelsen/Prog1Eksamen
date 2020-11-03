@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CBS Dating</title>
-    <link rel="stylesheet" type= "text/css" href="/frontPage.css">
+    <link rel="stylesheet" type= "text/css" href="../CSS/frontPage.css">
 </head>
 <body>
     <h1>Velkommen til CBS Dating</h1>
     <div class="grid">
         <div class="divLogin">
             <h3>Log ind</h3>
-            <form action="/login" method="POST" name="loginForm" role="form" enctype="application/json">
+            <form action="http://localhost:3000/login" method="POST" name="loginForm" role="form" enctype="application/json">
                 
                 <label for="email">Indtast Email:</label>
                 <input type="email" name="email" id="loginEmail" required>
@@ -26,7 +26,7 @@
         
         <div class="divSignup">
             <h3>Opret bruger</h3>
-            <form action="/signup" method="POST" name="signupForm" role="form" enctype="multipart/form-data">
+            <form action="http://localhost:3000/signup" method="POST" name="signupForm" role="form" enctype="multipart/form-data">
                 
                 <label for="email">Indtast Email:</label>
                 <input type="email" name="email" id="signupEmail" required>
@@ -65,6 +65,5 @@
             </form>
         </div>
     </div>
-    <script src="./JS/frontPage.js"></script>
 </body>
 </html>
