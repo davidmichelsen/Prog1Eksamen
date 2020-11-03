@@ -29,7 +29,9 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/Views/CSS"));
-app.set("view-engine", ejs);
+app.use(express.static("./images/"));
+//app.set("view-engine", ejs);
+app.use(cors());
 
 //Initialize database connection
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -207,6 +209,12 @@ app.get("/home", (req, res) => {
 app.get("/login", (req, res) => res.redirect("/"));
 
 app.get("/signup", (req, res) => res.redirect("/"));
+
+app.get("/test", (req, res) => {
+
+    res.send("http://localhost:3000/34ECD41B-010A-4991-AC78-DEA1818075AD_1_105_c.jpeg");
+
+});
 
 //Start application
 app.listen(3000, () => {
