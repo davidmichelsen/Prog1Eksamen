@@ -3,8 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const multer = require("multer");
-const ejs = require("ejs");
-const cors = require("cors");
+const cors = require('cors');
 const bodyParser = require("body-parser");
 var isLoggedIn = false;
 
@@ -25,11 +24,11 @@ const upload = multer({storage: storage});
 //Initialise application
 const app = express();
 
-//Use middleware and templateengine
+//Use middleware
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("./images/"));
-app.use(cors());
 
 //Initialize database connection
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -39,12 +38,6 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log("Database connected");
-});
-
-app.get("/", (req, res) => {
-
-    res.render("frontPage.ejs");
-
 });
 
 app.get("/Users/:userId", (req, res) => {
@@ -168,18 +161,17 @@ if (req.body != null) {
 
         if (users.length < 1) {
 
-            res.status(403).json({message: "Unauthorized"});
+            res.status(401).json({message: "Unauthorized"});
 
         }
 
         if (users[0].password == req.body.password) {
 
-            res.status(200).redirect("/home");
-            isLoggedIn = true;
+            res.status(200).json(users[0]);
 
         } else {
 
-            res.status(403).json({message: "Unauthorized"});
+            res.status(401).json({message: "Unauthorized"});
 
         }
 
