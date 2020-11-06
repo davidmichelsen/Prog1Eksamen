@@ -7,22 +7,25 @@
     <link rel="stylesheet" type= "text/css" href="/homePage.css">
 </head>
 <body>
+    
     <h1>Velkommen til CBS Dating - XXX</h1>
     <div class="grid">
         <div class="profile">
+            <% if (user) { %>
             <h2>Din profil:</h2>
-            <img src="#" alt="Profilbillede">
-            <h4 id="homeName">Dit navn</h4>
-            <p id="homeEmail"></p>
+            <img id="profileImage"src="/<%= user.image.filename %>" width="200px" heigth="200px" alt="Profilbillede">
+            <h4 id="homeName">Dit navn: <%= user.name %></h4>
+            <p id="homeEmail">Din email: <%= user.email %></p>
             <ul>
-                <li>Din alder</li>
-                <li>Dit køn</li>
-                <li>Dit foretrukne køn</li>
+                <li>Din alder: <%= user.age %></li>
+                <li>Dit køn: <%= user.gender %></li>
+                <li>Dit foretrukne køn: <%= user.preferredGender %></li>
             </ul>
-            <p>Dine interesser</p>
+            <p>Dine interesser:</p>
             <ul>
-
+                <li><%= user.userInterests %></li>
             </ul>
+            <% } %>
         </div>
         <div class="currentMatch">
             
@@ -31,7 +34,5 @@
             <h2>Se alle potentielle matches:</h2>
         </div>
     </div>
-    <script src="../JS/frontPage.js"></script>
-    <script src="../JS/homePage.js"></script>
 </body>
 </html>

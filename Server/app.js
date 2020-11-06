@@ -102,7 +102,7 @@ if (req.body != null) {
     
             if (result) {
     
-                res.status(200).render("homePage.ejs");
+                res.status(200).render("homePage.ejs", {user: result});
                 isLoggedIn = true;
     
             } else {
@@ -151,7 +151,7 @@ if (req.body != null) {
 
         if (users[0].password == req.body.password) {
 
-            res.status(200).render("homePage.ejs");
+            res.status(200).render("homePage.ejs", {user: users[0]});
             isLoggedIn = true;
 
         } else {
