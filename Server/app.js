@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const multer = require("multer");
 const cors = require('cors');
 const bodyParser = require("body-parser");
+const path = require("path");
+const ejs = require("ejs");
 var isLoggedIn = false;
 
 //Importing User model
@@ -16,7 +18,7 @@ const storage = multer.diskStorage({
     destination: "./images/",
 
     filename: (req, file, cb) => {
-        cb(null, req.body.email)
+        cb(null, req.body.email+"-"+path.extname(file.originalname))
     }
 });
 const upload = multer({storage: storage});
@@ -29,6 +31,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("./images/"));
+app.use(express.static("./Views/CSS"));
+app.set("view-engine", "ejs");
 
 //Initialize database connection
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -40,30 +44,10 @@ db.once('open', function() {
   console.log("Database connected");
 });
 
-app.get("/Users/:userId", (req, res) => {
+app.get("/", (req, res)=> {
 
-const id = req.params.userId;
+    res.render("frontPage.ejs");
 
-User.findById(id)
-.then(doc => {
-
-    if (doc){
-
-        res.status(200).json(doc);
-
-    } else {
-
-        res.status(404).json({message: "No user found with given ID"});
-
-    }
-
-})
-.catch(err => {
-    
-    console.log(err)
-    res.status(500).json({error: err});
-
-    });
 });
 
 app.get("/Users", (req, res) => {
@@ -118,7 +102,7 @@ if (req.body != null) {
     
             if (result) {
     
-                res.status(200).json(result);
+                res.status(200).render("homePage.ejs");
                 isLoggedIn = true;
     
             } else {
@@ -167,7 +151,8 @@ if (req.body != null) {
 
         if (users[0].password == req.body.password) {
 
-            res.status(200).json(users[0]);
+            res.status(200).render("homePage.ejs");
+            isLoggedIn = true;
 
         } else {
 
@@ -186,7 +171,7 @@ app.get("/home", (req, res) => {
 
     if (isLoggedIn == true) {
 
-        res.status(200).send("Congrats! You have access!");
+        res.status(200).render("homePage.ejs");
 
     } else {
 

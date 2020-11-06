@@ -1,6 +1,7 @@
 
 const loginBut = document.getElementById("login");
 const myFormData = document.forms.login;
+var myUser = {};
 
 const loginRequest = new XMLHttpRequest();
 
@@ -22,12 +23,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
         if (loginRequest.status == 200) {
 
-            //location.replace("homePage.html");
             var jsonUser = JSON.parse(loginRequest.responseText);
             console.log(jsonUser);
             console.log(jsonUser.email);
 
-            
+            location.replace("homePage.html");
+
+
         }
 
         if (loginRequest.status == 401) {
