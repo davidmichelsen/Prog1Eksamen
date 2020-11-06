@@ -6,7 +6,7 @@ const loginRequest = new XMLHttpRequest();
 
 window.addEventListener("DOMContentLoaded", () => {
 
-    console.log("Page loaded")
+    console.log("Page loaded");
 
     loginBut.addEventListener("submit", (e) => {
 
@@ -32,12 +32,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
         if (loginRequest.status == 401) {
 
-            console.log(JSON.stringify(loginRequest.responseText));
-
+            var json = JSON.parse(loginRequest.responseText);
+            console.log(json);
         }
 
         if (loginRequest.status == 404) {
-            console.log(JSON.stringify(loginRequest.responseText));
+            var json = JSON.parse(loginRequest.responseText);
+            console.log(json);        
         }
 
     };
