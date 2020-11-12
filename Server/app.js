@@ -93,7 +93,7 @@ if (req.body != null) {
             preferredGender: req.body.preferredGender,
             userInterests: req.body.interests.split(", "),
             image: req.file,
-            role: "User"
+            role: "user"
     
         });
     
@@ -149,10 +149,20 @@ if (req.body != null) {
 
         }
 
-        if (users[0].password == req.body.password) {
+        if (users[0].password == req.body.password && users[0].role == req.body.role) {
+
+            if(users[0].role == "admin") {
+
+            res.status(200).render("admin.ejs", {user: users[0]});
+            
+
+            }
+
+            if(users[0].role == "user") {
 
             res.status(200).render("homePage.ejs", {user: users[0]});
-            isLoggedIn = true;
+            
+            }
 
         } else {
 
@@ -167,20 +177,6 @@ if (req.body != null) {
 
 });
 
-app.get("/home", (req, res) => {
-
-    if (isLoggedIn == true) {
-
-        res.status(200).render("homePage.ejs");
-
-    } else {
-
-        res.status(403).redirect("/");
-
-    }
-
-});
-
 app.get("/login", (req, res) => res.redirect("/"));
 
 app.get("/signup", (req, res) => res.redirect("/"));
@@ -188,6 +184,52 @@ app.get("/signup", (req, res) => res.redirect("/"));
 app.get("/test", (req, res) => {
 
     res.send("http://localhost:3000/34ECD41B-010A-4991-AC78-DEA1818075AD_1_105_c.jpeg");
+
+});
+
+app.post("/update/:id", (req, res) => {
+
+    var id = req.params.id
+
+    User.find({_id: id})
+    .then(users => {
+
+        if(users.length > 0) {
+
+            users[0].name = req.body.name;
+
+            users[0].save()
+            .then(result => {
+
+                if(result) {
+
+                    res.status(200);
+
+                } else {res.json({error: "couldn't update user"})}
+
+            })
+            .catch(err => {
+                
+                if (err) {
+
+                    res.json({error: err})
+
+                }
+
+            });
+
+        } else {res.status(404).json({message: "No users"})}
+
+    })
+    .catch(err => {
+
+        if (err) {
+
+            res.status(404).json({error: err});
+
+        }
+
+    });
 
 });
 

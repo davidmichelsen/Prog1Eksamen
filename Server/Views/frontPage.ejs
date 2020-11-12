@@ -13,13 +13,16 @@
             <h3>Log ind</h3>
             <form action="/login" method="POST" name="loginForm" role="form" enctype="application/json">
                 
+                <input type="radio" name="role" id="rb1" value="admin"><b>Admin</b>
+                <input type="radio" name="role" id="rb2" value="user"><b>Bruger</b>
+                <br>
                 <label for="email">Indtast Email:</label>
                 <input type="email" name="email" id="loginEmail" required>
                 <br>
                 <label for="password">Indtast Password:</label>
                 <input type="password" name="password" id="loginPass" required>
                 <br>
-                <input type="submit" id="login">
+                <input type="submit" id="login" value="Log ind">
 
             </form>
         </div>
