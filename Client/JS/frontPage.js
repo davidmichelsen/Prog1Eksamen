@@ -9,9 +9,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
     console.log("Page loaded");
 
-    loginBut.addEventListener("submit", (e) => {
+    loginBut.addEventListener("click", (e) => {
 
         e.preventDefault();
+
+        console.log("Logind prøvet")
 
         loginRequest.open("POST", "http://localhost:3000/login", false);
         loginRequest.setRequestHeader("Content-Type", "application/json");
@@ -24,11 +26,8 @@ window.addEventListener("DOMContentLoaded", () => {
         if (loginRequest.status == 200) {
 
             var jsonUser = JSON.parse(loginRequest.responseText);
-            console.log(jsonUser);
-            console.log(jsonUser.email);
 
             location.replace("homePage.html");
-
 
         }
 

@@ -1,20 +1,21 @@
-const mongoose = require('mongoose');
+const { json } = require("body-parser");
+const fs = require("fs");
+const path = require("path");
 
-const userSchema = mongoose.Schema({
+try {
 
-    _id: mongoose.Types.ObjectId,
-    email: String,
-    password: String,
-    name: String,
-    age: Number,
-    gender: String,
-    preferredGender: String,
-    userInterests: [String],
-    image: Object,
-    role: String
+    const jsonString = fs.readFileSync(path.join(__dirname, "Users.json"))
+    const users = JSON.parse(jsonString);
 
-});
+    module.exports = users;
 
-const userModel = mongoose.model("User", userSchema);
+} catch(error) {
 
-module.exports = userModel;
+    console.log(error);
+    return
+
+}
+
+
+
+

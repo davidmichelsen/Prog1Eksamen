@@ -5,33 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CBS Dating</title>
     <link rel="stylesheet" type= "text/css" href="../CSS/homePage.css">
+    <script>
+
+       
+    </script>
 </head>
 <body>
-    <h1>Velkommen til CBS Dating - XXX</h1>
+    
+    <h1>Velkommen til CBS Dating</h1>
+    <button id="logOut">Log ud</button>
     <div class="grid">
         <div class="profile">
             <h2>Din profil:</h2>
-            <img src="/<%= user.image.filename %>" alt="Profilbillede">
-            <h4 id="homeName">Dit navn</h4>
-            <p id="homeEmail"></p>
-            <ul>
-                <li>Din alder</li>
-                <li>Dit køn</li>
-                <li>Dit foretrukne køn</li>
-            </ul>
-            <p>Dine interesser</p>
-            <ul>
-
-            </ul>
+            <img id="profileImage"src="#" width="200px" heigth="200px" alt="Profilbillede">
+            <h4 id="name">Dit navn:</h4><input type="radio" name="edit" class="edit" id="rName">
+            <p id="email">Din email:</p><input type="radio" name="edit" class="edit" id="rMail">
+            <p>Din alder:/p><input type="radio" name="edit" class="edit" id="rAge">
+            <p>Dit køn:</p>
+            <p>Dit foretrukne køn:</p>
+            <p>Dine interesser:</p>
+            <p>Interests</p><input type="radio" name="edit" class="edit" id="rInterests">
+            <br>
+            <button id="edit">Rediger bruger</button>
+            <input type="text" name="edit" class="edit" id="rText" placeholder="Indtast rettet info">
         </div>
         <div class="currentMatch">
             
         </div>
         <div class="allMatches">
-            <h2>Se alle potentielle matches:</h2>
+            <h2>Dine matches:</h2>
         </div>
     </div>
-    <script src="../JS/frontPage.js"></script>
     <script src="../JS/homePage.js"></script>
 </body>
 </html>

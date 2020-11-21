@@ -11,22 +11,25 @@
     <div class="grid">
         <div class="divLogin">
             <h3>Log ind</h3>
-            <form id="login">
+            <form name="login">
                 
+                <input type="radio" name="role" id="rb1" value="admin"><b>Admin</b>
+                <input type="radio" name="role" id="rb2" value="user"><b>Bruger</b>
+                <br>
                 <label for="email">Indtast Email:</label>
                 <input type="email" name="email" id="loginEmail" required>
                 <br>
                 <label for="password">Indtast Password:</label>
                 <input type="password" name="password" id="loginPass" required>
                 <br>
-                <input type="submit" id="login">
+                <input type="button" id="login" value="Log ind">
 
             </form>
         </div>
         
         <div class="divSignup">
             <h3>Opret bruger</h3>
-            <form action="http://localhost:3000/signup" method="POST" name="signupForm" role="form" enctype="multipart/form-data">
+            <form name="signupForm">
                 
                 <label for="email">Indtast Email:</label>
                 <input type="email" name="email" id="signupEmail" required>
@@ -42,16 +45,16 @@
                 <br>
                 <label for="gender">Vælg køn:</label>
                 <select name="gender" id="gender" required>
-                    <option value="male">Mand</option>
-                    <option value="female">Kvinde</option>
-                    <option value="other">Andet</option>
+                    <option value="mand">Mand</option>
+                    <option value="kvinde">Kvinde</option>
+                    <option value="andet">Andet</option>
                 </select>
                 <br>
                 <label for="preferredGender">Vælg foretrukne køn:</label>
                 <select name="preferredGender" id="preGender" required>
-                    <option value="male">Mand</option>
-                    <option value="female">Kvinde</option>
-                    <option value="other">Andet</option>
+                    <option value="mand">Mand</option>
+                    <option value="kvinde">Kvinde</option>
+                    <option value="andet">Andet</option>
                 </select>
                 <br>
                 <label for="interests">Indtast interesser – adskil med komma:</label>

@@ -1,3 +1,8 @@
+h1 {
+    text-align: center;
+    margin-top: 2%;
+}
+
 .grid {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
@@ -7,18 +12,28 @@
 
 .profile{
 
-    background-color: blue;
+    background-color: paleturquoise;
+    padding-left: 5%;
 
+}
+
+.edit {
+
+    display: none;
 }
 
 .currentMatch{
 
-    background-color: blue;
+    background-color: paleturquoise;
+    padding-left: 5%;
+
 
 }
 
 .allMatches{
 
-    background-color: blue;
+    background-color: paleturquoise;
+    padding-left: 5%;
+
 
 }
