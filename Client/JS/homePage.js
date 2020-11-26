@@ -3,13 +3,37 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const editUser = document.getElementById("edit");
     const logOut = document.getElementById("logOut");
+
+    //Profile information fields
+    const dispName = document.getElementById("name");
+    const dispEmail = document.getElementById("email");
+    const dispAge = document.getElementById("age");
+    const dispGender = document.getElementById("gender");
+    const dispPrefGender = document.getElementById("prefGender");
+    const dispInterests = document.getElementById("interests");
+    const image = document.getElementById("profileImage");
+    
+    //Edit user information fields
     const name = document.getElementById("rName");
     const mail = document.getElementById("rMail");
     const age = document.getElementById("rAge");
     const interests = document.getElementById("rInterests");
     const textField = document.getElementById("rText");
     var fields = [name, mail, age, interests, textField];
-    //var userId = '<%= user._id %>';
+
+    const myUser = JSON.parse(localStorage.getItem("User"));
+
+    console.log(myUser);
+
+    dispName.innerHTML = "Dit navn: " + myUser.name;
+    dispEmail.innerHTML = "Din email: " + myUser.email;
+    dispAge.innerHTML = "Din alder: " + myUser.age;
+    dispGender.innerHTML = "Dit køn: " + myUser.gender;
+    dispPrefGender.innerHTML = "Dit foretrukne køn: " + myUser.preferredGender;
+    dispInterests.innerHTML = myUser.userInterests;
+    image.src = "http://localhost:3000/" + myUser.image.filename;
+
+
 
         logOut.addEventListener("click", () => {
 

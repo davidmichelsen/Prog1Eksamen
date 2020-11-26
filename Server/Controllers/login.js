@@ -24,7 +24,7 @@ router.post("/", (req, res) => {
 
     });
 
-router.get("/login", (req, res) => res.send("Hov! - Du er vist havnet det forkerte sted. Åben HTML side for log ind og oprettelse."));
+router.get("/", (req, res) => res.send("Hov! - Du er vist havnet det forkerte sted. Åben HTML side for log ind og oprettelse."));
 
 
 module.exports = router;

@@ -1,17 +1,14 @@
 
 const loginBut = document.getElementById("login");
+const signUpBut = document.getElementById("signupButton");
 const myFormData = document.forms.login;
-var myUser = {};
 
 const loginRequest = new XMLHttpRequest();
+const signRequest = new XMLHttpRequest();
 
 window.addEventListener("DOMContentLoaded", () => {
 
-    console.log("Page loaded");
-
     loginBut.addEventListener("click", (e) => {
-
-        e.preventDefault();
 
         console.log("Logind prøvet")
 
@@ -21,11 +18,24 @@ window.addEventListener("DOMContentLoaded", () => {
 
     });
 
+    signUpBut.addEventListener("click", () => {
+
+    console.log("sign up tried");
+
+    const myData = new FormData(document.forms.signupForm);
+
+        signRequest.open("POST", "http://localhost:3000/signup", false);
+        signRequest.send(myData);
+
+    });
+
     loginRequest.onreadystatechange = () => {
 
         if (loginRequest.status == 200) {
 
-            var jsonUser = JSON.parse(loginRequest.responseText);
+            var jsonUser = loginRequest.responseText;
+
+            localStorage.setItem("User", jsonUser);
 
             location.replace("homePage.html");
 
@@ -43,5 +53,30 @@ window.addEventListener("DOMContentLoaded", () => {
         }
 
     };
+
+    signRequest.onreadystatechange = () => {
+
+        if(signRequest.status == 200) {
+
+            var jsonUser = signRequest.responseText;
+
+            localStorage.setItem("User", jsonUser);
+
+            location.replace("homePage.html");
+
+        }
+
+        if (signRequest.status == 401) {
+
+            var json = JSON.parse(signRequest.responseText);
+            console.log(json);
+        }
+
+        if (signRequest.status == 404) {
+            var json = JSON.parse(signRequest.responseText);
+            console.log(json);        
+        }
+
+    }
 
 });
