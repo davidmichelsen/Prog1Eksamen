@@ -1,17 +1,19 @@
 const express = require("express");
 const router = express.Router();
 const Users = require("../Models/Users.js");
-
+const potentialMatches = require("./findPotentials.js");
 
 router.post("/", (req, res) => {
 
     if(req.body != null) { 
 
+        const potentials = potentialMatches.findPotentialMatches();
+
         const currentUser = Users.find(user => user.email == req.body.email);
 
         if (currentUser.password == req.body.password) {
 
-            res.status(200).json(currentUser);
+            res.status(200).json({"user": currentUser, "potentials": potentials});
 
         } else {
 

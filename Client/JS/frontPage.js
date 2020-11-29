@@ -20,11 +20,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
     signUpBut.addEventListener("click", () => {
 
-    console.log("sign up tried");
-
     const myData = new FormData(document.forms.signupForm);
 
-        signRequest.open("POST", "http://localhost:3000/signup", false);
+        signRequest.open("POST", "http://localhost:3000/signup", true);
         signRequest.send(myData);
 
     });
@@ -35,7 +33,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
             var jsonUser = loginRequest.responseText;
 
-            localStorage.setItem("User", jsonUser);
+            var parsed = JSON.parse(jsonUser)
+
+            localStorage.setItem("user", JSON.stringify(parsed["user"]));
+            localStorage.setItem("potentials", JSON.stringify(parsed["potentials"]));
 
             location.replace("homePage.html");
 
@@ -56,25 +57,34 @@ window.addEventListener("DOMContentLoaded", () => {
 
     signRequest.onreadystatechange = () => {
 
-        if(signRequest.status == 200) {
+        if(signRequest.readyState == XMLHttpRequest.DONE) {
 
-            var jsonUser = signRequest.responseText;
+            if(signRequest.status == 200) {
 
-            localStorage.setItem("User", jsonUser);
+                var response = signRequest.responseText;
+    
+                var parsed = JSON.parse(response);
+    
+                localStorage.setItem("user", JSON.stringify(parsed["user"]));
+                localStorage.setItem("potentials", JSON.stringify(parsed["potentials"]));
+    
+                console.log(parsed["potentials"]);
 
-            location.replace("homePage.html");
+                location.replace("homePage.html");
+    
+            }
+    
+            if (signRequest.status == 401) {
+    
+                var json = JSON.parse(signRequest.responseText);
+                console.log(json);
+            }
+    
+            if (signRequest.status == 404) {
+                var json = JSON.parse(signRequest.responseText);
+                console.log(json);        
+            }
 
-        }
-
-        if (signRequest.status == 401) {
-
-            var json = JSON.parse(signRequest.responseText);
-            console.log(json);
-        }
-
-        if (signRequest.status == 404) {
-            var json = JSON.parse(signRequest.responseText);
-            console.log(json);        
         }
 
     }

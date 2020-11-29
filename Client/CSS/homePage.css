@@ -22,11 +22,11 @@ h1 {
     display: none;
 }
 
-.currentMatch{
+.potentialMatch{
 
     background-color: paleturquoise;
     padding-left: 5%;
-
+    text-align: center;
 
 }
 

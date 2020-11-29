@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Users = require("../Models/Users.js");
+const potentialMatches = require("./findPotentials.js");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
@@ -34,8 +35,8 @@ router.post("/", upload.single("image"), (req, res) => {
             "password": req.body.password,
             "age": req.body.age,
             "gender": req.body.gender,
-            "preferredGender": req.body.prefGender,
-            "userInterests": req.body.interests,
+            "preferredGender": req.body.preferredGender,
+            "userInterests": req.body.interests.split(", "),
             "image": req.file,
             "role": "user" 
 
@@ -45,20 +46,19 @@ router.post("/", upload.single("image"), (req, res) => {
 
         const jsonString = JSON.stringify(Users);
 
-        try {
+        fs.writeFile(path.join(__dirname, "../Models/Users.json"), jsonString, (err) => {
 
-            fs.writeFileSync(path.join(__dirname, "../Models/Users.json"), jsonString);
-            res.status(200).json(newUser);
+            if (err) {
 
-        } catch(error) {
-
-            if (error) {
-
-                res.status(500).json({error: error});
+                res.status(500).json({error: err});
 
             }
 
-        }
+            const potentials = potentialMatches.findPotentialMatches();
+
+            res.status(200).json({"user": newUser, "potentials": potentials});
+
+        });
 
     }
     

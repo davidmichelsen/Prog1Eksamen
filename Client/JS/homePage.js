@@ -1,8 +1,11 @@
 
+const saveRequest = new XMLHttpRequest();
+
 window.addEventListener("DOMContentLoaded", () => {
 
     const editUser = document.getElementById("edit");
     const logOut = document.getElementById("logOut");
+    var potMatchIndex = 0;
 
     //Profile information fields
     const dispName = document.getElementById("name");
@@ -21,9 +24,18 @@ window.addEventListener("DOMContentLoaded", () => {
     const textField = document.getElementById("rText");
     var fields = [name, mail, age, interests, textField];
 
-    const myUser = JSON.parse(localStorage.getItem("User"));
+    //Potential match info fields
+    const potName = document.getElementById("pName");
+    const potGender = document.getElementById("pGender");
+    const potAge = document.getElementById("pAge");
+    const potInterests = document.getElementById("pInterests");
+    const potImage = document.getElementById("pImg");
+    const likeBut = document.getElementById("like");
+    const dislikeBut = document.getElementById("dislike");
 
-    console.log(myUser);
+    const myUser = JSON.parse(localStorage.getItem("user"));
+    const allPotentials = JSON.parse(localStorage.getItem("potentials"));
+    const myPotentials = allPotentials[myUser.email];
 
     dispName.innerHTML = "Dit navn: " + myUser.name;
     dispEmail.innerHTML = "Din email: " + myUser.email;
@@ -32,8 +44,17 @@ window.addEventListener("DOMContentLoaded", () => {
     dispPrefGender.innerHTML = "Dit foretrukne køn: " + myUser.preferredGender;
     dispInterests.innerHTML = myUser.userInterests;
     image.src = "http://localhost:3000/" + myUser.image.filename;
+    const userId = myUser.id;
 
+    if(myPotentials.length > 0) {
 
+        getPotentialMatch(myPotentials[potMatchIndex]);
+
+    } else {
+
+        potName.innerHTML = "Du har desværre ikke nogle potentielle matches";
+
+    }
 
         logOut.addEventListener("click", () => {
 
@@ -42,8 +63,6 @@ window.addEventListener("DOMContentLoaded", () => {
         });
 
         let request = new XMLHttpRequest();
-
-
 
         editUser.addEventListener("click", () => {
 
@@ -70,35 +89,35 @@ window.addEventListener("DOMContentLoaded", () => {
                 //opdater oplysninger
                 if (name.checked == true) {
 
-                    request.open("POST", "/update/"+userId, true);
+                    request.open("POST", "http://localhost:3000/update/"+userId, true);
 
                     request.setRequestHeader("Content-Type", "application/json");
 
-                    request.send(JSON.stringify({name: textField.value}));
+                    request.send(JSON.stringify({"name": textField.value}));
 
                 } else  if (mail.checked == true) {
 
-                    request.open("POST", "/update/"+userId, true);
+                    request.open("POST", "http://localhost:3000/update/"+userId, true);
 
                     request.setRequestHeader("Content-Type", "application/json");
 
-                    request.send(JSON.stringify({email: textField.value}));
+                    request.send(JSON.stringify({"email": textField.value}));
 
                 } else if (age.checked == true) {
 
-                    request.open("POST", "/update/"+userId, true);
+                    request.open("POST", "http://localhost:3000/update/"+userId, true);
 
                     request.setRequestHeader("Content-Type", "application/json");
 
-                    request.send(JSON.stringify({age: textField.value}));
+                    request.send(JSON.stringify({"age": textField.value}));
 
                 } else if (interests.checked == true) {
 
-                    request.open("POST", "/update/"+userId, true);
+                    request.open("POST", "http://localhost:3000/update/"+userId, true);
 
                     request.setRequestHeader("Content-Type", "application/json");
 
-                    request.send(JSON.stringify({interests: textField.value}));
+                    request.send(JSON.stringify({"interests": textField.value}));
 
                 }
 
@@ -111,9 +130,66 @@ window.addEventListener("DOMContentLoaded", () => {
 
         request.onreadystatechange = () => {
 
+            if(request.status == 200) {
+
                 var json = JSON.parse(request.responseText);
                 console.log(json);
 
+                dispName.innerHTML = "Dit navn: " + json["user"].name;
+                dispEmail.innerHTML = "Din email: " + json["user"].email;
+                dispAge.innerHTML = "Din alder: " + json["user"].age;
+                dispInterests.innerHTML = json["user"].userInterests;
+                textField.value = "";
+
+            }
+           
+
         };
+
+        saveRequest.onreadystatechange = () => {
+
+            if (saveRequest.status == 200) {
+
+                console.log(JSON.parse(saveRequest.responseText));
+
+                potMatchIndex += 1;
+            
+                if (potMatchIndex < myPotentials.length-1) {
+                
+                    getPotentialMatch(myPotentials[potMatchIndex]);
+                
+                } else {
+
+                    potName.innerHTML = "Dummy User";
+                    potGender.innerHTML = "Du har desværre ikke flere potentielle matches";
+                    potAge.innerHTML = "";
+                    potInterests.innerHTML = "Interesser: " + "intet";
+                    potImage.src = "http://localhost:3000/" + "dummy@dummy.dk-.png";
+                    likeBut.style.display = "none";
+                    dislikeBut.style.display = "none";
+
+                }
+
+            }
+
+        }
+
+        likeBut.addEventListener("click", () => {
+
+            saveRequest.open("POST", "http://localhost:3000/action/like", false);
+            saveRequest.setRequestHeader("content-type", "application/json");
+            saveRequest.send(JSON.stringify({userOne: myUser, userTwo: myPotentials[potMatchIndex]}));
+
+        });
+
+        function getPotentialMatch(potMatch) {
+
+            potName.innerHTML = "Navn: " + potMatch.name;
+            potGender.innerHTML = "Køn: " + potMatch.gender;
+            potAge.innerHTML = "Alder: " + potMatch.age;
+            potInterests.innerHTML = "Interesser: " + potMatch.userInterests;
+            potImage.src = "http://localhost:3000/" + potMatch.image.filename
+
+        }
 
     });
