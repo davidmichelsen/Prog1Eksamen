@@ -37,6 +37,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
             localStorage.setItem("user", JSON.stringify(parsed["user"]));
             localStorage.setItem("potentials", JSON.stringify(parsed["potentials"]));
+            localStorage.setItem("matches", JSON.stringify(parsed["allMatches"]));
 
             location.replace("homePage.html");
 
@@ -67,9 +68,8 @@ window.addEventListener("DOMContentLoaded", () => {
     
                 localStorage.setItem("user", JSON.stringify(parsed["user"]));
                 localStorage.setItem("potentials", JSON.stringify(parsed["potentials"]));
+                localStorage.setItem("matches", JSON.stringify(parsed["allMatches"]));
     
-                console.log(parsed["potentials"]);
-
                 location.replace("homePage.html");
     
             }

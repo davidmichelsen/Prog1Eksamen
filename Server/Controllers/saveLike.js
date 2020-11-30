@@ -26,7 +26,7 @@ router.post("/like", (req, res) => {
 
         for(i=0; i < likes.length; i++) {
 
-            if (likes[0].email == userTwo.email) {
+            if (likes[i].email == userTwo.email) {
 
                 hasUser = true;
 
@@ -36,7 +36,7 @@ router.post("/like", (req, res) => {
 
         if(hasUser == false) {
 
-            likes.push({name: userTwo.name, email: userTwo.email});
+            likes.push({name: userTwo.name, age: userTwo.age, email: userTwo.email});
 
         }
 

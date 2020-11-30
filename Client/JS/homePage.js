@@ -5,6 +5,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const editUser = document.getElementById("edit");
     const logOut = document.getElementById("logOut");
+    const matchDiv = document.getElementById("allMatches");
     var potMatchIndex = 0;
 
     //Profile information fields
@@ -37,6 +38,9 @@ window.addEventListener("DOMContentLoaded", () => {
     const allPotentials = JSON.parse(localStorage.getItem("potentials"));
     const myPotentials = allPotentials[myUser.email];
 
+    const allMatches = JSON.parse(localStorage.getItem("matches"));
+    const myMatches = allMatches[myUser.email];
+
     dispName.innerHTML = "Dit navn: " + myUser.name;
     dispEmail.innerHTML = "Din email: " + myUser.email;
     dispAge.innerHTML = "Din alder: " + myUser.age;
@@ -53,6 +57,16 @@ window.addEventListener("DOMContentLoaded", () => {
     } else {
 
         potName.innerHTML = "Du har desværre ikke nogle potentielle matches";
+        likeBut.style.display = "none";
+        dislikeBut.style.display = "none";
+
+    }
+
+    for(i=0; i < myMatches.length; i++) {
+
+        var newItem = document.createElement("p");
+        newItem.innerHTML = myMatches[i].name + ", " + myMatches[i].email;
+        matchDiv.appendChild(newItem);
 
     }
 

@@ -39,7 +39,6 @@ function findPotentials() {
         
             dictionary[users[i].email] = potentials;
 
-        
         }
         
         return dictionary;
