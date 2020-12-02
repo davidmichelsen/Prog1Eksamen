@@ -1,11 +1,14 @@
 
 const saveRequest = new XMLHttpRequest();
+const request = new XMLHttpRequest();
+const delRequest = new XMLHttpRequest();
 
 window.addEventListener("DOMContentLoaded", () => {
 
     const editUser = document.getElementById("edit");
     const logOut = document.getElementById("logOut");
     const matchDiv = document.getElementById("allMatches");
+    const deleteBut = document.getElementById("deleteBut");
     var potMatchIndex = 0;
 
     //Profile information fields
@@ -50,33 +53,98 @@ window.addEventListener("DOMContentLoaded", () => {
     image.src = "http://localhost:3000/" + myUser.image.filename;
     const userId = myUser.id;
 
-    if(myPotentials.length > 0) {
+    if(myPotentials != undefined) {
 
-        getPotentialMatch(myPotentials[potMatchIndex]);
+        if(myMatches != undefined) {
 
-    } else {
+        for(i=0; i < myPotentials.length; i++) {
 
-        potName.innerHTML = "Du har desværre ikke nogle potentielle matches";
-        likeBut.style.display = "none";
-        dislikeBut.style.display = "none";
+            for(j=0; j < myMatches.length; j++) {
+
+                if(myPotentials[i].email  == myMatches[j].email) {
+
+                    myPotentials.splice(i, 1);
+        
+                }  
+
+            }  
+
+        }
+
+        }
+
+        if (potMatchIndex == myPotentials.length) {
+
+            potName.innerHTML = "Dummy User";
+            potGender.innerHTML = "Du har desværre ikke flere potentielle matches";
+            potAge.innerHTML = "";
+            potInterests.innerHTML = "Interesser: " + "intet";
+            potImage.src = "http://localhost:3000/" + "dummy@dummy.dk-.png";
+            likeBut.style.display = "none";
+            dislikeBut.style.display = "none";
+
+        } else if(myPotentials.length > 0) {
+
+            getPotentialMatch(myPotentials[potMatchIndex]);
+
+        } else {
+
+            potName.innerHTML = "Du har desværre ikke nogle potentielle matches";
+            likeBut.style.display = "none";
+            dislikeBut.style.display = "none";
+
+        }
 
     }
 
-    for(i=0; i < myMatches.length; i++) {
+    if(myMatches != undefined) {
 
-        var newItem = document.createElement("p");
-        newItem.innerHTML = myMatches[i].name + ", " + myMatches[i].email;
-        matchDiv.appendChild(newItem);
+        if(myMatches.length > 0) {
+
+        for(i=0; i < myMatches.length; i++) {
+
+            var newItem = document.createElement("p");
+            newItem.innerHTML = myMatches[i].name + ", " + myMatches[i].email + ", " + myMatches[i].age;
+            matchDiv.appendChild(newItem);
+    
+            }
+
+        }
 
     }
+
+        deleteBut.addEventListener("click", () => {
+
+            if (deleteBut.innerHTML == "Slet bruger") {
+
+                deleteBut.innerHTML = "Ja";
+                deleteBut.style.backgroundColor = "red";
+
+                setTimeout(() => {
+
+                    deleteBut.innerHTML = "Slet bruger";
+                    deleteBut.style.backgroundColor = "";
+
+
+                }, 5000);
+
+            } else if (deleteBut.innerHTML == "Ja") {
+
+                delRequest.open("POST","http://localhost:3000/update/delete", false);
+                delRequest.setRequestHeader("content-type", "application/json");
+                delRequest.send(JSON.stringify({"email": myUser.email}));    
+
+            }
+
+        });
 
         logOut.addEventListener("click", () => {
+
+            localStorage.setItem("loggedIn", "false");
 
             location.replace("frontPage.html");
 
         });
-
-        let request = new XMLHttpRequest();
 
         editUser.addEventListener("click", () => {
 
@@ -103,7 +171,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 //opdater oplysninger
                 if (name.checked == true) {
 
-                    request.open("POST", "http://localhost:3000/update/"+userId, true);
+                    request.open("POST", "http://localhost:3000/update/user/"+userId, true);
 
                     request.setRequestHeader("Content-Type", "application/json");
 
@@ -111,7 +179,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
                 } else  if (mail.checked == true) {
 
-                    request.open("POST", "http://localhost:3000/update/"+userId, true);
+                    request.open("POST", "http://localhost:3000/update/user/"+userId, true);
 
                     request.setRequestHeader("Content-Type", "application/json");
 
@@ -119,7 +187,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
                 } else if (age.checked == true) {
 
-                    request.open("POST", "http://localhost:3000/update/"+userId, true);
+                    request.open("POST", "http://localhost:3000/update/user/"+userId, true);
 
                     request.setRequestHeader("Content-Type", "application/json");
 
@@ -127,7 +195,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
                 } else if (interests.checked == true) {
 
-                    request.open("POST", "http://localhost:3000/update/"+userId, true);
+                    request.open("POST", "http://localhost:3000/update/user/"+userId, true);
 
                     request.setRequestHeader("Content-Type", "application/json");
 
@@ -141,6 +209,24 @@ window.addEventListener("DOMContentLoaded", () => {
             
 
         });
+
+        delRequest.onreadystatechange = () => {
+
+            if (delRequest.readyState = XMLHttpRequest.DONE) {
+
+                if (delRequest.status == 200) {
+
+                    localStorage.removeItem("user");
+                    localStorage.removeItem("potentials");
+                    localStorage.removeItem("matches");
+
+                    location.replace("frontPage.html");
+
+                }
+
+            }
+
+        };
 
         request.onreadystatechange = () => {
 
@@ -164,7 +250,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
             if (saveRequest.status == 200) {
 
-                console.log(JSON.parse(saveRequest.responseText));
+                const parsed = JSON.parse(saveRequest.responseText);
+                const newMatches = parsed["allMatches"];
+                const myNew = newMatches[myUser.email];
 
                 potMatchIndex += 1;
             
@@ -184,6 +272,24 @@ window.addEventListener("DOMContentLoaded", () => {
 
                 }
 
+                while(matchDiv.firstChild) {
+
+                    matchDiv.removeChild(matchDiv.lastChild);
+
+                }
+
+                var newItem = document.createElement("h2");
+                newItem.innerHTML = "Dine matches:";
+                matchDiv.appendChild(newItem);
+
+                for (i=0; i < myNew.length; i++) {
+
+                var item = document.createElement("p");
+                item.innerHTML = myNew[i].name + ", " + myNew[i].email + ", " + myNew[i].age;
+                matchDiv.appendChild(item);
+
+                }
+
             }
 
         }
@@ -193,6 +299,28 @@ window.addEventListener("DOMContentLoaded", () => {
             saveRequest.open("POST", "http://localhost:3000/action/like", false);
             saveRequest.setRequestHeader("content-type", "application/json");
             saveRequest.send(JSON.stringify({userOne: myUser, userTwo: myPotentials[potMatchIndex]}));
+
+        });
+
+        dislikeBut.addEventListener("click", () => {
+
+            potMatchIndex += 1;
+            
+            if (potMatchIndex < myPotentials.length-1) {
+                
+                getPotentialMatch(myPotentials[potMatchIndex]);
+            
+            } else {
+
+                potName.innerHTML = "Dummy User";
+                potGender.innerHTML = "Du har desværre ikke flere potentielle matches";
+                potAge.innerHTML = "";
+                potInterests.innerHTML = "Interesser: " + "intet";
+                potImage.src = "http://localhost:3000/" + "dummy@dummy.dk-.png";
+                likeBut.style.display = "none";
+                dislikeBut.style.display = "none";
+
+            }
 
         });
 

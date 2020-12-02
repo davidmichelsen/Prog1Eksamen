@@ -20,12 +20,24 @@ function findPotentials() {
             }
         
             for(j=0; j < users.length; j++) {
+
+                var hasUser = false;
         
                 if (i != j) {
         
                     if (matchUsers(users[i], users[j]) == true) {
-        
-                        if(!potentials.includes(users[j])) {
+                        
+                        for(l = 0; l < potentials.length; l++) {
+
+                            if(potentials[l].email == users[j].email) {
+
+                                hasUser = true 
+
+                            }
+
+                        }
+
+                        if(hasUser == false) {
         
                         potentials.push(users[j]);
         

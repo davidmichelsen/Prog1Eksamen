@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const fs = require("fs");
 const path = require("path");
+const matches = require("./matchUsers.js");
 
 
 router.post("/like", (req, res) => {
@@ -48,7 +49,7 @@ router.post("/like", (req, res) => {
 
             fs.writeFileSync(path.join(__dirname, "../Models/Likes.json"), newString);
 
-            res.status(200).json({message: "like gemt"});
+            res.status(200).json({message: "like gemt", "allMatches": matches.matchUsers()});
 
         } catch(err) {
 

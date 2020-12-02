@@ -8,6 +8,12 @@ const signRequest = new XMLHttpRequest();
 
 window.addEventListener("DOMContentLoaded", () => {
 
+    if(localStorage.getItem("loggedIn") == "true") {
+
+        location.replace("homePage.html");
+
+    }
+
     loginBut.addEventListener("click", (e) => {
 
         console.log("Logind prøvet")
@@ -35,9 +41,30 @@ window.addEventListener("DOMContentLoaded", () => {
 
             var parsed = JSON.parse(jsonUser)
 
-            localStorage.setItem("user", JSON.stringify(parsed["user"]));
-            localStorage.setItem("potentials", JSON.stringify(parsed["potentials"]));
-            localStorage.setItem("matches", JSON.stringify(parsed["allMatches"]));
+            if(localStorage.getItem("user") != undefined) {
+
+                localStorage.removeItem("user");
+
+            }
+
+                localStorage.setItem("user", JSON.stringify(parsed["user"]));
+
+            if(localStorage.getItem("potentials") != undefined) {
+
+                localStorage.removeItem("potentials");
+
+            }
+
+                localStorage.setItem("potentials", JSON.stringify(parsed["potentials"]));
+
+            if(localStorage.getItem("matches") != undefined) {
+
+                localStorage.removeItem("matches");
+
+            }
+                localStorage.setItem("matches", JSON.stringify(parsed["allMatches"]));
+
+                localStorage.setItem("loggedIn", "true");
 
             location.replace("homePage.html");
 

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Users = require("../Models/Users.js");
 const potentialMatches = require("./findPotentials.js");
+const allMatches = require("../Controllers/matchUsers.js");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
@@ -54,9 +55,7 @@ router.post("/", upload.single("image"), (req, res) => {
 
             }
 
-            const potentials = potentialMatches.findPotentialMatches();
-
-            res.status(200).json({"user": newUser, "potentials": potentials});
+            res.status(200).json({"user": newUser, "potentials": potentialMatches.findPotentialMatches(), "allMatches": allMatches.matchUsers()});
 
         });
 

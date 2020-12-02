@@ -4,7 +4,7 @@ const allUsers = require("../Models/Users.js");
 const fs = require("fs");
 const path = require("path");
 
-router.post("/:id", (req, res) => {
+router.post("/user/:id", (req, res) => {
 
     var id = req.params.id
 
@@ -24,7 +24,7 @@ router.post("/:id", (req, res) => {
 
         } else if (req.body.interests != undefined) {
 
-            foundUser.userInterests = req.body.interests;
+            foundUser.userInterests = req.body.interests.split(", ");
 
         }
 
@@ -43,6 +43,46 @@ router.post("/:id", (req, res) => {
         }
         
     }    
+
+});
+
+router.post("/delete", (req, res) => {
+
+    console.log(req.body.email);
+
+    for(i=0; i < allUsers.length; i++) {
+
+        if(allUsers[i].email == req.body.email) {
+
+            allUsers.splice(i, 1);
+
+        }
+
+    }
+
+    try {
+        
+        fs.writeFileSync(path.join(__dirname, "../Models/Users.json"), JSON.stringify(allUsers), (err) => {
+
+            if(err) {
+
+                console.log(err);
+
+            }
+
+            res.status(200).json({"status": "Slettet!"});
+
+        });
+
+    } catch (err) {
+
+        if (err) {
+
+            res.status(500).json({error: err});
+
+        }
+        
+    }   
 
 });
 

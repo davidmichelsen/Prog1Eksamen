@@ -8,14 +8,17 @@ router.post("/", (req, res) => {
 
     if(req.body != null) { 
 
-        const potentials = potentialMatches.findPotentialMatches();
-        const finalMatches = allMatches.matchUsers();
-
         const currentUser = Users.find(user => user.email == req.body.email);
+
+        if(!currentUser) {
+
+            res.status(404).json({error: "No user exists with given information"})
+
+        }
 
         if (currentUser.password == req.body.password) {
 
-            res.status(200).json({"user": currentUser, "potentials": potentials, "allMatches": finalMatches});
+            res.status(200).json({"user": currentUser, "potentials": potentialMatches.findPotentialMatches(), "allMatches": allMatches.matchUsers()});
 
         } else {
 
