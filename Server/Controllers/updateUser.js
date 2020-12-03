@@ -86,4 +86,67 @@ router.post("/delete", (req, res) => {
 
 });
 
+router.post("/deleteMatch", (req, res) => {
+
+    const matchEmail = req.body.matchEmail;
+    const myEmail = req.body.myEmail;
+
+    try{
+
+        const stringLikes = fs.readFileSync(path.join(__dirname, "../Models/Likes.json"));
+        const likes = JSON.parse(stringLikes);
+
+        const stringMatches = fs.readFileSync(path.join(__dirname, "../Models/Matches.json"));
+        const foundMatches = JSON.parse(stringMatches);
+
+        for(i=0; i < likes[myEmail].length; i++) {
+
+            if (likes[myEmail][i].email == matchEmail) {
+
+                likes[myEmail].splice(i, 1);
+
+            }
+
+        }
+
+        for(i=0; i < foundMatches[myEmail].length; i++) {
+
+            if (foundMatches[myEmail][i].email == matchEmail) {
+
+                foundMatches[myEmail].splice(i, 1);
+
+            }
+
+        }
+
+        for(i=0; i < foundMatches[matchEmail].length; i++) {
+
+            if (foundMatches[matchEmail][i].email == myEmail) {
+
+                foundMatches[matchEmail].splice(i, 1);
+
+            }
+
+        }
+
+        fs.writeFileSync(path.join(__dirname, "../Models/Likes.json"), JSON.stringify(likes));
+
+        fs.writeFileSync(path.join(__dirname, "../Models/Matches.json"), JSON.stringify(foundMatches));
+
+        res.status(200).json({"allMatches": foundMatches});
+
+    }catch(err) {
+
+        if (err) {
+
+            console.log(err);
+            res.status(500).json({"error": err});
+
+        }
+
+    }
+
+
+});
+
 module.exports = router;

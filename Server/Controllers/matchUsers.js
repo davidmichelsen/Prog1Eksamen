@@ -35,7 +35,7 @@ function matchUsers() {
                     for(h = 0; h < matches.length; h++) {
 
                         if(matches[h].email == likes[keys[i]][j].email) {
-
+                            
                             hasMatch = true;
 
                         }
@@ -47,6 +47,8 @@ function matchUsers() {
                         matches.push({name: likes[keys[i]][j].name, age: likes[keys[i]][j].age, email: likes[keys[i]][j].email});
 
                     }
+
+                    hasMatch = false;
                 
                     }
 
@@ -91,4 +93,4 @@ module.exports = {
 
 };
 
-matchUsers();
+//matchUsers()

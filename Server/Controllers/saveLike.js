@@ -45,17 +45,18 @@ router.post("/like", (req, res) => {
 
         const newString = JSON.stringify(allLikes);
 
-        try {
+        fs.writeFile(path.join(__dirname, "../Models/Likes.json"), newString, (err) => {
 
-            fs.writeFileSync(path.join(__dirname, "../Models/Likes.json"), newString);
+            if (err) {
+
+                console.log(err);
+
+            }
 
             res.status(200).json({message: "like gemt", "allMatches": matches.matchUsers()});
 
-        } catch(err) {
+        });
 
-            if (err) {console.log(err);}
-            
-        }
 
     } catch(err) {
 

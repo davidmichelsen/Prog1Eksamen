@@ -2,6 +2,7 @@
 const saveRequest = new XMLHttpRequest();
 const request = new XMLHttpRequest();
 const delRequest = new XMLHttpRequest();
+const removeMatchReq = new XMLHttpRequest();
 
 window.addEventListener("DOMContentLoaded", () => {
 
@@ -9,6 +10,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const logOut = document.getElementById("logOut");
     const matchDiv = document.getElementById("allMatches");
     const deleteBut = document.getElementById("deleteBut");
+    const editMatches = document.getElementById("editMatches");
     var potMatchIndex = 0;
 
     //Profile information fields
@@ -42,7 +44,8 @@ window.addEventListener("DOMContentLoaded", () => {
     const myPotentials = allPotentials[myUser.email];
 
     const allMatches = JSON.parse(localStorage.getItem("matches"));
-    const myMatches = allMatches[myUser.email];
+    var myMatches = allMatches[myUser.email];
+    var amountOfMatches = 0;
 
     dispName.innerHTML = "Dit navn: " + myUser.name;
     dispEmail.innerHTML = "Din email: " + myUser.email;
@@ -52,6 +55,12 @@ window.addEventListener("DOMContentLoaded", () => {
     dispInterests.innerHTML = myUser.userInterests;
     image.src = "http://localhost:3000/" + myUser.image.filename;
     const userId = myUser.id;
+    
+    var input = document.createElement("input");
+    input.type = "text";
+    input.placeholder = "Indtast match-email";
+    input.id = "matchMail";
+    input.style.display = "none";
 
     if(myPotentials != undefined) {
 
@@ -101,6 +110,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
         if(myMatches.length > 0) {
 
+            amountOfMatches = myMatches.length;
+
         for(i=0; i < myMatches.length; i++) {
 
             var newItem = document.createElement("p");
@@ -113,201 +124,226 @@ window.addEventListener("DOMContentLoaded", () => {
 
     }
 
-        deleteBut.addEventListener("click", () => {
+    matchDiv.appendChild(input);
 
-            if (deleteBut.innerHTML == "Slet bruger") {
+    editMatches.addEventListener("click", () => {
 
-                deleteBut.innerHTML = "Ja";
-                deleteBut.style.backgroundColor = "red";
+        if (editMatches.innerHTML == "Rediger matches") {
 
-                setTimeout(() => {
+            document.getElementById("matchMail").style.display = "block";
+    
+            editMatches.innerHTML = "Slet indtastet match";
+            editMatches.style.backgroundColor = "red";
 
-                    deleteBut.innerHTML = "Slet bruger";
-                    deleteBut.style.backgroundColor = "";
+            setTimeout(() => {
+
+                editMatches.innerHTML = "Rediger matches";
+                editMatches.style.backgroundColor = "";
+                document.getElementById("matchMail").style.display = "none";
+
+            }, 10000);
+
+        } else if(editMatches.innerHTML == "Slet indtastet match") {
+
+            removeMatchReq.open("POST", "http://localhost:3000/update/deleteMatch");
+            removeMatchReq.setRequestHeader("content-type", "application/json");
+            removeMatchReq.send(JSON.stringify({"matchEmail": document.getElementById("matchMail").value, "myEmail": myUser.email}));
+
+            editMatches.innerHTML = "Rediger matches";
+
+            document.getElementById("matchMail").style.display = "none";
+
+        }
+
+        
+
+    });
+
+    deleteBut.addEventListener("click", () => {
+
+        if (deleteBut.innerHTML == "Slet bruger") {
+
+            deleteBut.innerHTML = "Ja";
+            deleteBut.style.backgroundColor = "red";
+
+            setTimeout(() => {
+
+                deleteBut.innerHTML = "Slet bruger";
+                deleteBut.style.backgroundColor = "";
 
 
-                }, 5000);
+            }, 5000);
 
-            } else if (deleteBut.innerHTML == "Ja") {
+        } else if (deleteBut.innerHTML == "Ja") {
 
-                delRequest.open("POST","http://localhost:3000/update/delete", false);
-                delRequest.setRequestHeader("content-type", "application/json");
-                delRequest.send(JSON.stringify({"email": myUser.email}));    
+            delRequest.open("POST","http://localhost:3000/update/delete", false);
+            delRequest.setRequestHeader("content-type", "application/json");
+            delRequest.send(JSON.stringify({"email": myUser.email}));    
 
-            }
+        }
 
-        });
+    });
 
-        logOut.addEventListener("click", () => {
+    logOut.addEventListener("click", () => {
 
-            localStorage.setItem("loggedIn", "false");
+        localStorage.setItem("loggedIn", "false");
 
-            location.replace("frontPage.html");
+        location.replace("frontPage.html");
 
-        });
+    });
 
-        editUser.addEventListener("click", () => {
+    editUser.addEventListener("click", () => {
 
-            if (editUser.innerHTML == "Rediger bruger") {
+        if (editUser.innerHTML == "Rediger bruger") {
 
-                for(i=0;i<fields.length;i++) {
-            
-                    fields[i].style.display = "block";
-
-                }
-
-                editUser.innerHTML = "Gem brugeroplysninger";
-
-            }
-            
-            else if (editUser.innerHTML == "Gem brugeroplysninger") {
-
-                for(i=0;i<fields.length;i++) {
-            
-                    fields[i].style.display = "none";
-
-                }
-
-                //opdater oplysninger
-                if (name.checked == true) {
-
-                    request.open("POST", "http://localhost:3000/update/user/"+userId, true);
-
-                    request.setRequestHeader("Content-Type", "application/json");
-
-                    request.send(JSON.stringify({"name": textField.value}));
-
-                } else  if (mail.checked == true) {
-
-                    request.open("POST", "http://localhost:3000/update/user/"+userId, true);
-
-                    request.setRequestHeader("Content-Type", "application/json");
-
-                    request.send(JSON.stringify({"email": textField.value}));
-
-                } else if (age.checked == true) {
-
-                    request.open("POST", "http://localhost:3000/update/user/"+userId, true);
-
-                    request.setRequestHeader("Content-Type", "application/json");
-
-                    request.send(JSON.stringify({"age": textField.value}));
-
-                } else if (interests.checked == true) {
-
-                    request.open("POST", "http://localhost:3000/update/user/"+userId, true);
-
-                    request.setRequestHeader("Content-Type", "application/json");
-
-                    request.send(JSON.stringify({"interests": textField.value}));
-
-                }
-
-                editUser.innerHTML = "Rediger bruger";
-
-            }
-            
-
-        });
-
-        delRequest.onreadystatechange = () => {
-
-            if (delRequest.readyState = XMLHttpRequest.DONE) {
-
-                if (delRequest.status == 200) {
-
-                    localStorage.removeItem("user");
-                    localStorage.removeItem("potentials");
-                    localStorage.removeItem("matches");
-
-                    location.replace("frontPage.html");
-
-                }
+            for(i=0;i<fields.length;i++) {
+        
+                fields[i].style.display = "block";
 
             }
 
-        };
+            editUser.innerHTML = "Gem brugeroplysninger";
 
-        request.onreadystatechange = () => {
+        }
+        
+        else if (editUser.innerHTML == "Gem brugeroplysninger") {
 
-            if(request.status == 200) {
-
-                var json = JSON.parse(request.responseText);
-                console.log(json);
-
-                dispName.innerHTML = "Dit navn: " + json["user"].name;
-                dispEmail.innerHTML = "Din email: " + json["user"].email;
-                dispAge.innerHTML = "Din alder: " + json["user"].age;
-                dispInterests.innerHTML = json["user"].userInterests;
-                textField.value = "";
+            for(i=0;i<fields.length;i++) {
+        
+                fields[i].style.display = "none";
 
             }
-           
 
-        };
+            //opdater oplysninger
+            if (name.checked == true) {
 
-        saveRequest.onreadystatechange = () => {
+                request.open("POST", "http://localhost:3000/update/user/"+userId, true);
 
-            if (saveRequest.status == 200) {
+                request.setRequestHeader("Content-Type", "application/json");
 
-                const parsed = JSON.parse(saveRequest.responseText);
-                const newMatches = parsed["allMatches"];
-                const myNew = newMatches[myUser.email];
+                request.send(JSON.stringify({"name": textField.value}));
 
-                potMatchIndex += 1;
-            
-                if (potMatchIndex < myPotentials.length-1) {
+            } else  if (mail.checked == true) {
+
+                request.open("POST", "http://localhost:3000/update/user/"+userId, true);
+
+                request.setRequestHeader("Content-Type", "application/json");
+
+                request.send(JSON.stringify({"email": textField.value}));
+
+            } else if (age.checked == true) {
+
+                request.open("POST", "http://localhost:3000/update/user/"+userId, true);
+
+                request.setRequestHeader("Content-Type", "application/json");
+
+                request.send(JSON.stringify({"age": textField.value}));
+
+            } else if (interests.checked == true) {
+
+                request.open("POST", "http://localhost:3000/update/user/"+userId, true);
+
+                request.setRequestHeader("Content-Type", "application/json");
+
+                request.send(JSON.stringify({"interests": textField.value}));
+
+            }
+
+            editUser.innerHTML = "Rediger bruger";
+
+        }
+        
+
+    });
+
+    removeMatchReq.onreadystatechange = () => {
+
+        if(removeMatchReq.status == 200) {
                 
-                    getPotentialMatch(myPotentials[potMatchIndex]);
-                
-                } else {
+            var response = removeMatchReq.responseText;
+            var parsed = JSON.parse(response);
+            var newMatches = parsed["allMatches"];
+            var myNew = newMatches[myUser.email];
+            myMatches = myNew;
+            localStorage.setItem("matches", JSON.stringify(myNew));
 
-                    potName.innerHTML = "Dummy User";
-                    potGender.innerHTML = "Du har desværre ikke flere potentielle matches";
-                    potAge.innerHTML = "";
-                    potInterests.innerHTML = "Interesser: " + "intet";
-                    potImage.src = "http://localhost:3000/" + "dummy@dummy.dk-.png";
-                    likeBut.style.display = "none";
-                    dislikeBut.style.display = "none";
+            while(matchDiv.firstChild) {
 
-                }
+                matchDiv.removeChild(matchDiv.lastChild);
 
-                while(matchDiv.firstChild) {
+            }
 
-                    matchDiv.removeChild(matchDiv.lastChild);
+            var newItem = document.createElement("h2");
+            newItem.innerHTML = "Dine matches:";
+            matchDiv.appendChild(newItem);
 
-                }
+            for (i=0; i < myNew.length; i++) {
 
-                var newItem = document.createElement("h2");
-                newItem.innerHTML = "Dine matches:";
-                matchDiv.appendChild(newItem);
+            var item = document.createElement("p");
+            item.innerHTML = myNew[i].name + ", " + myNew[i].email + ", " + myNew[i].age;
+            matchDiv.appendChild(item);
 
-                for (i=0; i < myNew.length; i++) {
+            }
 
-                var item = document.createElement("p");
-                item.innerHTML = myNew[i].name + ", " + myNew[i].email + ", " + myNew[i].age;
-                matchDiv.appendChild(item);
+            if(myNew.length > amountOfMatches) {
 
-                }
+                alert("Nyt match!");
+
+               }
 
             }
 
         }
 
-        likeBut.addEventListener("click", () => {
+    delRequest.onreadystatechange = () => {
 
-            saveRequest.open("POST", "http://localhost:3000/action/like", false);
-            saveRequest.setRequestHeader("content-type", "application/json");
-            saveRequest.send(JSON.stringify({userOne: myUser, userTwo: myPotentials[potMatchIndex]}));
+        if (delRequest.readyState = XMLHttpRequest.DONE) {
 
-        });
+            if (delRequest.status == 200) {
 
-        dislikeBut.addEventListener("click", () => {
+                localStorage.removeItem("user");
+                localStorage.removeItem("potentials");
+                localStorage.removeItem("matches");
+
+                location.replace("frontPage.html");
+
+            }
+
+        }
+
+    };
+
+    request.onreadystatechange = () => {
+
+        if(request.status == 200) {
+
+            var json = JSON.parse(request.responseText);
+            console.log(json);
+
+            dispName.innerHTML = "Dit navn: " + json["user"].name;
+            dispEmail.innerHTML = "Din email: " + json["user"].email;
+            dispAge.innerHTML = "Din alder: " + json["user"].age;
+            dispInterests.innerHTML = json["user"].userInterests;
+            textField.value = "";
+
+        }
+        
+
+    };
+
+    saveRequest.onreadystatechange = () => {
+
+        if (saveRequest.status == 200) {
+
+            const parsed = JSON.parse(saveRequest.responseText);
+            const newMatches = parsed["allMatches"];
+            const myNew = newMatches[myUser.email];
+            myMatches = myNew;
 
             potMatchIndex += 1;
-            
+        
             if (potMatchIndex < myPotentials.length-1) {
-                
+            
                 getPotentialMatch(myPotentials[potMatchIndex]);
             
             } else {
@@ -322,16 +358,72 @@ window.addEventListener("DOMContentLoaded", () => {
 
             }
 
-        });
+            while(matchDiv.firstChild) {
 
-        function getPotentialMatch(potMatch) {
+                matchDiv.removeChild(matchDiv.lastChild);
 
-            potName.innerHTML = "Navn: " + potMatch.name;
-            potGender.innerHTML = "Køn: " + potMatch.gender;
-            potAge.innerHTML = "Alder: " + potMatch.age;
-            potInterests.innerHTML = "Interesser: " + potMatch.userInterests;
-            potImage.src = "http://localhost:3000/" + potMatch.image.filename
+            }
+
+            var newItem = document.createElement("h2");
+            newItem.innerHTML = "Dine matches:";
+            matchDiv.appendChild(newItem);
+
+            for (i=0; i < myNew.length; i++) {
+
+            var item = document.createElement("p");
+            item.innerHTML = myNew[i].name + ", " + myNew[i].email + ", " + myNew[i].age;
+            matchDiv.appendChild(item);
+
+            }
+
+            if(myNew.length > amountOfMatches) {
+
+                alert("Nyt match!");
+
+            }
 
         }
+
+    }
+
+    likeBut.addEventListener("click", () => {
+
+        saveRequest.open("POST", "http://localhost:3000/action/like", false);
+        saveRequest.setRequestHeader("content-type", "application/json");
+        saveRequest.send(JSON.stringify({userOne: myUser, userTwo: myPotentials[potMatchIndex]}));
+
+    });
+
+    dislikeBut.addEventListener("click", () => {
+
+        potMatchIndex += 1;
+        
+        if (potMatchIndex < myPotentials.length-1) {
+            
+            getPotentialMatch(myPotentials[potMatchIndex]);
+        
+        } else {
+
+            potName.innerHTML = "Dummy User";
+            potGender.innerHTML = "Du har desværre ikke flere potentielle matches";
+            potAge.innerHTML = "";
+            potInterests.innerHTML = "Interesser: " + "intet";
+            potImage.src = "http://localhost:3000/" + "dummy@dummy.dk-.png";
+            likeBut.style.display = "none";
+            dislikeBut.style.display = "none";
+
+        }
+
+    });
+
+    function getPotentialMatch(potMatch) {
+
+        potName.innerHTML = "Navn: " + potMatch.name;
+        potGender.innerHTML = "Køn: " + potMatch.gender;
+        potAge.innerHTML = "Alder: " + potMatch.age;
+        potInterests.innerHTML = "Interesser: " + potMatch.userInterests;
+        potImage.src = "http://localhost:3000/" + potMatch.image.filename
+
+    }
 
     });
