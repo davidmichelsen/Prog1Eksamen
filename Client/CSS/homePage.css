@@ -1,0 +1,39 @@
+h1 {
+    text-align: center;
+    margin-top: 2%;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-auto-rows: minmax(500px, auto);
+    grid-column-gap: 10em;
+}
+
+.profile{
+
+    background-color: #64a5da;
+    padding-left: 5%;
+
+}
+
+.edit {
+
+    display: none;
+}
+
+.potentialMatch{
+
+    background-color: #64a5da;
+    padding-left: 5%;
+    text-align: center;
+
+}
+
+.allMatches{
+
+    background-color: #64a5da;
+    padding-left: 5%;
+
+
+}

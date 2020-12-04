@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBS Dating</title>
+    <link rel="stylesheet" type= "text/css" href="../CSS/homePage.css">
+    <script>
+
+       
+    </script>
+</head>
+<body>
+        <button id="logOut">Log ud</button>
+    <div class="grid">
+        <div class="profile">
+            <h2>Din profil:</h2>
+            <img id="profileImage"src="#" width="200px" heigth="200px" alt="Profilbillede">
+            <h4 id="name">Dit navn:</h4><input type="radio" name="edit" class="edit" id="rName">
+            <p id="email">Din email:</p><input type="radio" name="edit" class="edit" id="rMail">
+            <p id="age">Din alder:</p><input type="radio" name="edit" class="edit" id="rAge">
+            <p id="gender">Dit køn:</p>
+            <p id="prefGender">Dit foretrukne køn:</p>
+            <p>Dine interesser:</p>
+            <p id="interests">Interests</p><input type="radio" name="edit" class="edit" id="rInterests">
+            <br>
+            <button id="edit">Rediger bruger</button>
+            <input type="text" name="edit" class="edit" id="rText" placeholder="Indtast rettet info">
+            <button id="deleteBut">Slet bruger</button>
+        </div>
+        <div class="potentialMatch">
+            <h2>Potentielt match</h2>
+            <p id="pName">Navn: </p>
+            <p id="pGender">Køn: </p>
+            <p id="pAge">Alder:</p>
+            <p id="pInterests">Interesser:</p>
+            <button id="like"> Like </button>
+            <img id="pImg" src="#" alt="Potentielt match billede" width="250px" height="auto">
+            <button id="dislike"> Dislike </button>
+        </div>
+        <div class="allMatches">
+            <div id="allMatches">
+            <h2>Dine matches:</h2>
+            </div>
+            <button id="editMatches">Rediger matches</button>
+        </div>
+    </div>
+    <script src="../JS/homePage.js"></script>
+</body>
+</html>
