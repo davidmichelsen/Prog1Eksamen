@@ -11,7 +11,7 @@ const updateUser = require("./Controllers/updateUser.js");
 //Initialise application
 const app = express();
 
-//Use middleware
+//Use middleware and router objects
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -21,6 +21,7 @@ app.use("/signup", signupController);
 app.use("/action", saveLikeController);
 app.use("/update", updateUser);
 
+//Handle GET request to root directory
 app.get("/", (req, res)=> {
 
     res.send("Hov! - Du er vist havnet det forkerte sted. Åben HTML side for log ind og oprettelse.");

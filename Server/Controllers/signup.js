@@ -1,11 +1,14 @@
+//Import packages
 const express = require("express");
 const router = express.Router();
-const Users = require("../Models/Users.js");
-const potentialMatches = require("./findPotentials.js");
-const allMatches = require("../Controllers/matchUsers.js");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
+
+//Import Usermodel, potential likes and all matches
+const Users = require("../Models/Users.js");
+const potentialMatches = require("./findPotentials.js");
+const allMatches = require("../Controllers/matchUsers.js");
 
 //Setup multer storage for uploaded user images
 const storage = multer.diskStorage({
@@ -16,18 +19,23 @@ const storage = multer.diskStorage({
         cb(null, req.body.email+"-"+path.extname(file.originalname))
     }
 });
+//Declare upload function which saves to the given storage
 const upload = multer({storage: storage});
 
+//Handle signup request
 router.post("/", upload.single("image"), (req, res) => {
 
+    //Make sure the request body is not empty
     if (req.body != null) {
     
+        //Make sure there is not an existing user with the given email
         if(Users.find(user => user.email == req.body.email)) {
 
             res.status(404).json({message: "Brugeren eksisterer allerede."});
 
         }
-
+        
+        //Create user object with sent request data
         const newUser = {
 
             "id": Date.now(),
@@ -43,10 +51,12 @@ router.post("/", upload.single("image"), (req, res) => {
 
         }
 
-        Users.push(newUser)
+        //Add new user object to the rest of the existing users
+        Users.push(newUser);
 
         const jsonString = JSON.stringify(Users);
 
+        //Save all users again
         fs.writeFile(path.join(__dirname, "../Models/Users.json"), jsonString, (err) => {
 
             if (err) {
@@ -63,7 +73,8 @@ router.post("/", upload.single("image"), (req, res) => {
     
     });
 
+//Handle GET request to signup, which is not possible
 router.get("/", (req, res) => res.send("Hov! - Du er vist havnet det forkerte sted. Åben HTML side for log ind og oprettelse."));
 
-
+//Export router object to app.js
 module.exports = router;

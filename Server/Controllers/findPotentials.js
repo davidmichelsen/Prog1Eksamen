@@ -1,14 +1,20 @@
+//Import packages
 const fs = require("fs");
 const path = require("path");
 var dictionary = {};
 
+//Declare function for finding potential likes
 function findPotentials() {
 
+    //try/catch to handle errors of loading JSON files
     try {
 
+        //Get all existing users. I read directly from the JSON file instead of importing Usermodel
+        //because the Usermodel that finds the users only reads from the file when server is initially started
         const jsonUsers = fs.readFileSync(path.join(__dirname, "../Models/Users.json"));
         const users = JSON.parse(jsonUsers);
         
+        //I assign already existing potential likes to the empty array for all users
         for(i=0; i < users.length; i++) {
         
             var potentials = [];
@@ -18,15 +24,19 @@ function findPotentials() {
                 potentials = dictionary[users[i].email];
         
             }
-        
+
+            //Iterate over all users again to get a second user
             for(j=0; j < users.length; j++) {
 
                 var hasUser = false;
         
+                //Make sure the loops aren't looking at the same user
                 if (i != j) {
         
+                    //Use the algorith to check if the to users are compatible
                     if (matchUsers(users[i], users[j]) == true) {
                         
+                        //Make sure not to add same users multiple times
                         for(l = 0; l < potentials.length; l++) {
 
                             if(potentials[l].email == users[j].email) {
@@ -37,6 +47,7 @@ function findPotentials() {
 
                         }
 
+                        //Add compatible user to the potential likes
                         if(hasUser == false) {
         
                         potentials.push(users[j]);
@@ -49,10 +60,12 @@ function findPotentials() {
         
             }
         
+            //Save the compatible users for the potential likes
             dictionary[users[i].email] = potentials;
 
         }
         
+        //Export the potential likes
         return dictionary;
         
         } catch(error) {
@@ -66,7 +79,7 @@ function findPotentials() {
     }
 
 } 
-    
+    //Declare algorith to find out if two users are compatible based on sex, age and interests
     function matchUsers(matchOne, matchTwo){
     
         if (matchOne.preferredGender == matchTwo.gender && matchTwo.preferredGender == matchOne.gender) {
@@ -110,12 +123,11 @@ function findPotentials() {
     
     };
 
+//Export function for finding potential likes
 module.exports = {
 
     findPotentialMatches: findPotentials
 
 }
-
-findPotentials();
 
 

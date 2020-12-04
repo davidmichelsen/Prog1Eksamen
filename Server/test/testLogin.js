@@ -1,10 +1,12 @@
-
+//Import packages
 const assert = require("assert");
 const mocha = require("mocha");
 const users = require("../Models/Users.json");
 
+//Initialise suite
 describe("Test af log ind", function() {
     
+    //Initialise specific test
     it("Should find a user in JSON file with given email and address and return user", function() {
 
         let requestBody = {
