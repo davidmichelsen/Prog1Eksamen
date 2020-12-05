@@ -52,7 +52,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
             var parsed = JSON.parse(jsonUser)
 
-            //Check if locale storage has data saved for the user, potential likes and matches
+            //Check if local storage has data saved for the user, potential likes and matches
             //Hereafter remove it if there is any existing data and save the newly gotten data from login
             if(localStorage.getItem("user") != undefined) {
 
@@ -80,7 +80,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 //Save the user as logged in
                 localStorage.setItem("loggedIn", "true");
 
-            //After having saved all data to locale storage go to the home page
+            //After having saved all data to local storage go to the home page
             location.replace("homePage.html");
 
         }
@@ -116,7 +116,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 var response = signRequest.responseText;
                 var parsed = JSON.parse(response);
     
-                //Check if locale storage has data saved for the user, potential likes and matches
+                //Check if local storage has data saved for the user, potential likes and matches
                 //Hereafter remove it if there is any existing data and save the newly gotten data from sign up
                 if(localStorage.getItem("user") != undefined) {
 
@@ -144,7 +144,7 @@ window.addEventListener("DOMContentLoaded", () => {
                 //Save the user as logged in
                 localStorage.setItem("loggedIn", "true");
 
-                //After having saved all data to locale storage go to the home page
+                //After having saved all data to local storage go to the home page
                 location.replace("homePage.html");
     
             }

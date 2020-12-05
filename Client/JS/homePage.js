@@ -7,6 +7,13 @@ const removeMatchReq = new XMLHttpRequest();
 //Wait to after all elements of the HTML page have been loaded
 window.addEventListener("DOMContentLoaded", () => {
 
+    //Check if user is logged in
+    if(localStorage.getItem("loggedIn") == "false") {
+
+        location.replace("frontPage.html");
+
+    }
+
     //Get buttons from HTML page
     const editUser = document.getElementById("edit");
     const logOut = document.getElementById("logOut");
@@ -52,7 +59,7 @@ window.addEventListener("DOMContentLoaded", () => {
     //Get all potential likes for the current user
     const myPotentials = allPotentials[myUser.email];
 
-    //Get all matches from locale storage
+    //Get all matches from local storage
     const allMatches = JSON.parse(localStorage.getItem("matches"));
 
     //Get all matches for the current user
@@ -235,7 +242,7 @@ window.addEventListener("DOMContentLoaded", () => {
     //The user clicked the "Log out" button
     logOut.addEventListener("click", () => {
 
-        //Change state of boolean in locale storage which indicates if the user is logged in
+        //Change state of boolean in local storage which indicates if the user is logged in
         localStorage.setItem("loggedIn", "false");
 
         //Go back to log in page
@@ -373,7 +380,7 @@ window.addEventListener("DOMContentLoaded", () => {
             var myNew = newMatches[myUser.email];
             myMatches = myNew;
 
-            //Save the new matches to locale storage
+            //Save the new matches to local storage
             localStorage.setItem("matches", JSON.stringify(myNew));
 
             //Remove existing matches from HTML page
@@ -417,7 +424,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
             if (delRequest.status == 200) {
 
-                //Remove all data of the current user from locale storage
+                //Remove all data of the current user from local storage
                 localStorage.removeItem("user");
                 localStorage.removeItem("potentials");
                 localStorage.removeItem("matches");

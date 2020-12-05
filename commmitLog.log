@@ -1,0 +1,24 @@
+* 464e9d5 : alle kravspecifikationer opfyldt og tilføjet kommentarer til alt kode
+* bdc6703 : nu muligt at fjerne match og matche igen bagefter, test af log ind gennemført
+* b79106b : opdater matches ved like, dislike viser ny bruger, forbliv logget ind
+* 9dc4f3c : Nu muligt at matche med en anden bruger og se matches ved log ind
+* 7a544ca : muligt at like bruger og få liste af potentielle matches med over når man logger ind eller opretter ny bruger
+* 7f80d12 : Fjernet mongodb og tilføjet JSON filer samt localestorage
+* 53f80d9 : Fjernet mongodb og mongoose og oprettet database som JSON fil
+* ffeecc7 : nu muligt at redigere navn på logget ind bruger hvorefter man kan genindlæse siden og navnet ændres
+* a2b4554 : res.render tager nu user objekt med over i html og indlæser alt userdata og billede på siden
+* bdf49a6 : tilbageført templateengine
+* b1f29dc : enkelte rettelser
+* 5dbbfae : login kan nu gennemføres gennem html fil og resultat kan læses
+* 0326f1b : fjernet mappen Views og ejs filer
+* aa964c3 : Client- og Servermappe tilføjet
+* 203c3ca : tilføjet /home side og boolean som på API tjekker om bruger er logget ind. Yderligere kan man nu ikke, ved fejl, gå til /login og /signup med GET, men bliver omdirigeret til forsiden
+* 5b11e87 : tjek om der allerede eksisterer bruger og log ind mulig
+* 30aec33 : fjernet frontPage.js fil bedre frontPage CSS
+* 95e0f47 : nu muligt at uploade billeder som får navn efter indtastet email
+* 005b3df : bruger oprettelse ud fra email og password samt frontpage
+* 88e7e0a : oprettelse af Views mappe og frontPage fil
+* 4b39a5b : tilføjet ejs, multer, cors
+* f64b71b : Connected to mongoose
+* aea743e : npm init
+* d1f6e26 : test
